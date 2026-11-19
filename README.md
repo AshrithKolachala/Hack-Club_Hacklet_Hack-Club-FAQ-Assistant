@@ -10,4 +10,6 @@ I made this for "Hacklet" program in Hack Club.
 THE FAQ's ARE TAKEN FROM THE OFFICIAL HACK CLUB'S HELP SECTION AT help.hackclub.com. Only the 1st question "What is Hack Club" was given by me as an extra with reference to Google and other Official Sources.
 
 
-If you want to test this without adding this Bookmarklet into your bookmarks list, you can check out the index.html in this link- 
+If you want to test this without adding this Bookmarklet into your bookmarks list, you can check out the index.html in this link- ashrithkolachala.github.io/Hack-Club_Hacklet_Hack-Club-FAQ-Assistant.
+
+If you want to add it to your bookmarks list, copy and paste the bookmarklet.js into your URL field inside the bookmark adding card.
