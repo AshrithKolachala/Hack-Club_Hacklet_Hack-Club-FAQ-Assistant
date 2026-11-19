@@ -1,0 +1,171 @@
+javascript:(function(){
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hack Club FAQ Assistant - By Ashrith Kolachala</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: system-ui, sans-serif;
+            background: black;
+            color: white;
+            display: grid;
+            place-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 15px;
+        }
+        .card {
+            width: min(400px, 90vw);
+            background: black;
+            border: 1px solid grey;
+            border-radius: 10px;
+            padding: 15px; }
+        #chat {
+            height: 240px;
+            overflow-y: auto;
+            background: black;
+            border-radius: 10px;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 15px;}
+        .choices {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;}
+        .choice-btn {
+            padding: 10px;
+            border-radius: 999px;
+            border: 1px solid grey;
+            background: black;
+            color: white;
+            cursor: pointer;
+            font-size: 15px;}
+        .choice-btn.selected {
+            background: darkslateblue;
+            border-color: navy;
+            color: white;}
+        .row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;}
+        #selectedPreview {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid grey;
+            background: black;
+            color: white;
+            overflow-wrap: anywhere;}
+        #sendBtn {
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            background: blue;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;}
+    </style>
+</head> <body>
+    <div class="card">
+        <h2>Hack Club FAQ Assistant</h2>
+        <div id="chat"></div>
+        <div class="choices" id="choicesContainer">
+            <button type="button" class="choice-btn" data-msg="What is Hack Club?">What is Hack Club?</button>
+            <button type="button" class="choice-btn" data-msg="How do I verify my age for a Hack Club event?"> How do I verify my age for a Hack Club event?</button>
+            <button type="button" class="choice-btn" data-msg="How do I apply to start a Hack Club?">How do I apply to start a Hack Club?</button>
+            <button type="button" class="choice-btn" data-msg="How do I set up Hackatime to track my coding hours?">How do I set up Hackatime to track my coding hours?</button>
+            <button type="button" class="choice-btn" data-msg="How do I get support for my HCB organization?">How do I get support for my HCB organization?</button>
+            <button type="button" class="choice-btn" data-msg="I can't find the help channel for my event. What should I do?">I can't find the help channel for my event. What should I do?</button>
+            <button type="button" class="choice-btn" data-msg="What is the Hack Club phone number?">What is the Hack Club phone number?</button>
+        </div>
+        <div class="row">
+            <div id="selectedPreview">Select a message from above</div>
+            <button type="button" id="sendBtn">Send</button>
+        </div>
+    </div>
+    <script>
+    (function() {
+        let selected_message = "";
+        const MESSAGE_REPLIES = {
+            "What is Hack Club?":
+                "Hack Club is a Non-Profit organization 'Made by Teens for Teens' that operates a global network of high school coding clubs. Hack Club provides resources, mentorship, and a community for students to learn and build projects together.",
+            "How do I verify my age for a Hack Club event?":
+                "Go to Hack Club Auth and upload a photo ID (passport, driver's license, or school ID). Verification usually takes less than a day. Make sure your name and date of birth are clearly visible.",
+            "How do I apply to start a Hack Club?":
+                "Any high school student can start a Hack Club. Fill out the application at apply.hackclub.com. Once approved, you'll get access to workshops, a Slack community, and more. It is free!",
+            "How do I set up Hackatime to track my coding hours?":
+                "Visit hackatime.hackclub.com/my/wakatime_setup and follow the setup guide for your editor. Hackatime works with VS Code, Neovim, JetBrains IDEs, and editors supporting WakaTime.",
+            "How do I get support for my HCB organization?":
+                "For general questions, post in #hcb on Slack. For urgent issues (lost card, frozen funds), email hcb@hackclub.com or call 1-844-237-2290.",
+            "I can't find the help channel for my event. What should I do?":
+                "Drop a message in #help on Slack and someone will point you to the right place.",
+            "What is the Hack Club phone number?":
+                "You can reach Hack Club toll-free at 1-855-625-HACK (4225). For urgent HCB banking issues specifically, call 1-844-237-2290."
+        };
+        const chat = document.getElementById("chat");
+        const preview = document.getElementById("selectedPreview");
+        const sendBtn = document.getElementById("sendBtn");
+        function add_chat_line(sender, message) {
+            const p = document.createElement("p");
+            p.style.margin = "5px 0";
+            const strong = document.createElement("strong");
+            strong.textContent = sender + ": ";
+            p.appendChild(strong);
+            p.appendChild(document.createTextNode(message));
+            chat.appendChild(p);
+            chat.scrollTop = chat.scrollHeight;
+        }
+        document.querySelectorAll(".choice-btn").forEach(btn => {
+            btn.addEventListener("click", function() {
+                selected_message = this.getAttribute("data-msg");
+                document.querySelectorAll(".choice-btn").forEach(el => {
+                    el.classList.remove("selected");
+                });
+                this.classList.add("selected");
+                preview.textContent = selected_message;
+            });
+        });
+        sendBtn.addEventListener("click", function() {
+            if (!selected_message) {
+                add_chat_line(
+                    "Hack Club FAQ Assistant",
+                    "Please select a message from above before sending."
+                );
+                return;
+            }
+            add_chat_line("You", selected_message);
+            const reply = MESSAGE_REPLIES[selected_message] ||
+                "Please choose one of the messages from the list above.";
+            add_chat_line("Hack Club FAQ Assistant", reply);
+            selected_message = "";
+            document.querySelectorAll(".choice-btn").forEach(el => {
+                el.classList.remove("selected");
+            });
+            preview.textContent = "Select a message from above";
+        });
+        add_chat_line(
+            "Hack Club FAQ Assistant",
+            "Welcome! How can I help you?"
+        );
+    })();
+    </script>
+</body>
+</html>`;
+    const blob = new Blob([html], {type: "text/html"});
+    const url = URL.createObjectURL(blob);
+    const newWindow = window.open(url, "_blank");
+    if (!newWindow) {
+        alert("Popup blocked! Please allow popups and try again.");
+        URL.revokeObjectURL(url);
+        return;}
+    newWindow.addEventListener("beforeunload", function() {
+        URL.revokeObjectURL(url);
+    });
+})();
